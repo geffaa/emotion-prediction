@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Recognition</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        button { padding: 10px 20px; }
+        #result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Emotion Recognition</h1>
+        <textarea id="text-input" placeholder="Enter your text here..."></textarea>
+        <button onclick="predictEmotion()">Predict Emotion</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function predictEmotion() {
+            const text = document.getElementById('text-input').value;
+            axios.post('/predict', { text: text })
+                .then(function (response) {
+                    const result = response.data;
+                    document.getElementById('result').innerHTML = `
+                        <h2>Predicted Emotion: ${result.emotion}</h2>
+                        <p>Confidence: ${(result.confidence * 100).toFixed(2)}%</p>
+                    `;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                    document.getElementById('result').innerHTML = 'An error occurred. Please try again.';
+                });
+        }
+    </script>
+</body>
+</html>
